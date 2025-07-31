@@ -11,7 +11,10 @@ const config = {
     // // JWT Configuration
     // JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
     // JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-    
+
+    // Admin Configuration
+    ADMIN_SECRET_KEY: process.env.ADMIN_SECRET_KEY || 'your-admin-secret-key-here',
+
     // // API Keys
     // GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
     

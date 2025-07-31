@@ -1,38 +1,24 @@
-// const jwt = require('jsonwebtoken');
-// const User = require('../models/user.model');
-// const config = require('../config');
-// const logger = require('../utils/logger');
+const config = require('../../config');
+const logger = require('../../utils/logger');
 
-// const authMiddleware = async (req, res, next) => {
-//     try {
-//         const token = req.header('Authorization')?.replace('Bearer ', '');
-        
-//         if (!token) {
-//             return res.status(401).json({ 
-//                 success: false, 
-//                 message: 'Access denied. No token provided.' 
-//             });
-//         }
-        
-//         const decoded = jwt.verify(token, config.JWT_SECRET);
-//         const user = await User.findById(decoded.userId).select('-password');
-        
-//         if (!user) {
-//             return res.status(401).json({ 
-//                 success: false, 
-//                 message: 'Invalid token. User not found.' 
-//             });
-//         }
-        
-//         req.user = user;
-//         next();
-//     } catch (error) {
-//         logger.error('Auth middleware error:', error);
-//         res.status(401).json({ 
-//             success: false, 
-//             message: 'Invalid token.' 
-//         });
-//     }
-// };
+const authMiddleware = async (req, res, next) => {
+    try {
+           const secret  =  req.header('x-secret-key');
+        if (secret !== config.ADMIN_SECRET_KEY) {
+            return res.status(403).json({
+                success: false,
+                message: 'Forbidden: You do not have permission to access this resource.'
+            });
+        } else {
+            next();
+        }
+    } catch (error) {
+        logger.error('Authentication middleware error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        });
+    }
+};
 
-// module.exports = authMiddleware;
+module.exports = authMiddleware;

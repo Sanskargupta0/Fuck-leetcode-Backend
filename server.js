@@ -16,7 +16,7 @@ const { globalErrorHandler } = require('./src/utils/errorHandler');
 // Import routes
 // const userRoutes = require('./src/api/routes/user.routes');
 // const taskRoutes = require('./src/api/routes/task.routes');
-// const adminRoutes = require('./src/api/routes/admin.routes');
+const adminRoutes = require('./src/api/routes/admin.routes');
 
 // Initialize Express app
 const app = express();
@@ -80,7 +80,7 @@ app.get('/health', (req, res) => {
 // API routes
 // app.use(`/api/${config.API_VERSION}/users`, userRoutes);
 // app.use(`/api/${config.API_VERSION}/tasks`, taskRoutes);
-// app.use(`/api/${config.API_VERSION}/admin`, adminRoutes);
+app.use(`/api/${config.API_VERSION}/admin`, adminRoutes);
 
 // Handle undefined routes
 app.all('/*splat', (req, res) => {
