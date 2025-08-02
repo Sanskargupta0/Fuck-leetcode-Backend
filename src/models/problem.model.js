@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const problemSchema = new mongoose.Schema({
     question_id: {
@@ -35,9 +35,7 @@ const problemSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Indexes for faster queries
-problemSchema.index({ difficulty: 1 });
-problemSchema.index({ question_id: 1 });
-problemSchema.index({ question__title_slug: 1 });
+// Compound  indexes for faster queries
+problemSchema.index({ question_id: 1,   question__title_slug: 1})
 
-module.exports = mongoose.model('Problem', problemSchema);
+export default mongoose.model('Problem', problemSchema);

@@ -1,6 +1,6 @@
-// const { GoogleGenerativeAI } = require('@google/generative-ai');
-// const config = require('../config');
-// const logger = require('../utils/logger');
+// import { GoogleGenerativeAI } from '@google/generative-ai';
+// import config from '../config/index.js';
+// import logger from '../utils/logger.js';
 
 // class GeminiService {
 //     constructor() {
@@ -181,4 +181,4 @@
 //     }
 // }
 
-// module.exports = new GeminiService();
+// export default new GeminiService();

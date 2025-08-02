@@ -1,26 +1,8 @@
-// const express = require('express');
-// const router = express.Router();
-// const authMiddleware = require('../middleware/auth.middleware');
+import express from 'express';
+import authMiddleware from '../middleware/auth.middleware.js';
+import LeetcodeService from '../../services/leetcode.service.js';
 
-// // Admin routes
-// router.get('/users', authMiddleware, (req, res) => {
-//     // Get all users - admin only
-//     res.status(200).json({ message: 'Admin users endpoint' });
-// });
-
-// router.get('/stats', authMiddleware, (req, res) => {
-//     // Get system stats - admin only
-//     res.status(200).json({ message: 'Admin stats endpoint' });
-// });
-
-// module.exports = router;
-
-const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth.middleware');
-const LeetcodeService = require('../../services/leetcode.service');
-
-
 
 router.post('/sync-problems', authMiddleware, (req, res) => {
     
@@ -32,4 +14,4 @@ router.post('/sync-problems', authMiddleware, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

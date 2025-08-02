@@ -1,14 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        minlength: 3,
-        maxlength: 30
-    },
     email: {
         type: String,
         required: true,
@@ -17,17 +9,12 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
     },
-    password: {
-        type: String,
-        required: true,
-        minlength: 6
-    },
     leetcodeUsername: {
         type: String,
         trim: true
     },
     solvedProblems: [{
-        problemId: {
+        question_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Problem'
         },
@@ -40,22 +27,19 @@ const userSchema = new mongoose.Schema({
             default: Date.now
         }
     }],
-    preferences: {
-        difficulty: {
-            type: String,
-            enum: ['Easy', 'Medium', 'Hard'],
-            default: 'Easy'
-        },
-        topics: [{
-            type: String
-        }]
+    apiKey: {
+        type: String,
+        unique: true,
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
     }
 }, {
     timestamps: true
 });
 
-// Index for faster queries
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 });
+// Compound indexes for faster queries
+userSchema.index({ apiKey: 1, solvedProblems: 1 });
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

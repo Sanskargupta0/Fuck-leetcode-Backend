@@ -1,7 +1,8 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const axios = require('axios');
-const Problem = require('../models/problem.model');
+import dotenv from 'dotenv';
+dotenv.config();
+import mongoose from 'mongoose';
+import axios from 'axios';
+import Problem from '../models/problem.model.js';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const LEETCODE_API_URL = 'https://leetcode.com/api/problems/all/';

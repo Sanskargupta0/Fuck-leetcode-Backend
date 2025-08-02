@@ -2,6 +2,7 @@
   "name": "fuck-leetcode-backend",
   "version": "1.0.0",
   "description": "Backend for the Fuck LeetCode - An AI-powered LeetCode practice platform",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

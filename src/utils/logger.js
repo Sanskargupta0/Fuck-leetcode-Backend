@@ -1,6 +1,6 @@
-const winston = require('winston');
-const path = require('path');
-const config = require('../config');
+import winston from 'winston';
+import path from 'path';
+import config from '../config/index.js';
 
 // Define custom colors
 const colors = {
@@ -13,7 +13,7 @@ const colors = {
 winston.addColors(colors);
 
 // Create logs directory if it doesn't exist
-const fs = require('fs');
+import fs from 'fs';
 const logsDir = path.join(process.cwd(), 'logs');
 if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir);
@@ -71,4 +71,4 @@ logger.stream = {
     }
 };
 
-module.exports = logger;
+export default logger;

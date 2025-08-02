@@ -1,22 +1,22 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const compression = require('compression');
-const morgan = require('morgan');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import compression from 'compression';
+import morgan from 'morgan';
 
 // Import configuration and utilities
-const config = require('./src/config');
-const connectDB = require('./src/config/db');
-const logger = require('./src/utils/logger');
-const { globalErrorHandler } = require('./src/utils/errorHandler');
+import config from './src/config/index.js';
+import connectDB from './src/config/db.js';
+import logger from './src/utils/logger.js';
+import { globalErrorHandler } from './src/utils/errorHandler.js';
 
 // Import routes
-// const userRoutes = require('./src/api/routes/user.routes');
-// const taskRoutes = require('./src/api/routes/task.routes');
-const adminRoutes = require('./src/api/routes/admin.routes');
+// import userRoutes from './src/api/routes/user.routes.js';
+import taskRoutes from './src/api/routes/task.routes.js';
+import adminRoutes from './src/api/routes/admin.routes.js';
 
 // Initialize Express app
 const app = express();
@@ -79,7 +79,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 // app.use(`/api/${config.API_VERSION}/users`, userRoutes);
-// app.use(`/api/${config.API_VERSION}/tasks`, taskRoutes);
+app.use(`/api/${config.API_VERSION}/tasks`, taskRoutes);
 app.use(`/api/${config.API_VERSION}/admin`, adminRoutes);
 
 // Handle undefined routes
@@ -117,4 +117,4 @@ process.on('SIGTERM', () => {
     });
 });
 
-module.exports = app;
+export default app;

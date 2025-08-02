@@ -1,5 +1,5 @@
-const config = require('../../config');
-const logger = require('../../utils/logger');
+import config from '../../config/index.js';
+import logger from '../../utils/logger.js';
 
 const authMiddleware = async (req, res, next) => {
     try {
@@ -21,4 +21,4 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;

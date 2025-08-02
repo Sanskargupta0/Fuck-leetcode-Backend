@@ -1,8 +1,8 @@
-// const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
-// const User = require('../models/user.model');
-// const logger = require('../utils/logger');
-// const config = require('../config');
+// import bcrypt from 'bcrypt';
+// import jwt from 'jsonwebtoken';
+// import User from '../models/user.model.js';
+// import logger from '../utils/logger.js';
+// import config from '../config/index.js';
 
 // class UserController {
 //     async register(req, res) {
@@ -129,4 +129,4 @@
 //     }
 // }
 
-// module.exports = new UserController();
+// export default new UserController();

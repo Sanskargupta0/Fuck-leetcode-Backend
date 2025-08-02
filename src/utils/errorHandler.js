@@ -1,4 +1,4 @@
-const logger = require('./logger');
+import logger from './logger.js';
 
 class AppError extends Error {
     constructor(message, statusCode) {
@@ -97,7 +97,4 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-module.exports = {
-    AppError,
-    globalErrorHandler
-};
+export { AppError, globalErrorHandler };

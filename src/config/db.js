@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const config = require('./index');
-const logger = require('../utils/logger');
+import mongoose from 'mongoose';
+import config from './index.js';
+import logger from '../utils/logger.js';
 
 const connectDB = async () => {
     try {
@@ -38,4 +38,4 @@ process.on('SIGINT', async () => {
     }
 });
 
-module.exports = connectDB;
+export default connectDB;
