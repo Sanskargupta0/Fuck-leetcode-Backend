@@ -37,7 +37,7 @@ connectDB();
 
 
 app.use(cors({
-    origin: [config.CORS_ORIGIN, 'https://www.fuckleetcode.tech', 'https://fuckleetcode.tech', 'https://www.fuckleetcode.tech/', 'https://fuckleetcode.tech/', '*' ],
+    origin: [config.CORS_ORIGIN, 'www.fuckleetcode.tech/', 'https://www.fuckleetcode.tech', 'https://fuckleetcode.tech', 'https://www.fuckleetcode.tech/', 'https://fuckleetcode.tech/', '*' ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-secret-key'],
     exposedHeaders: ['Content-Type', 'Authorization', 'token'],
@@ -70,7 +70,7 @@ app.use('/api/', limiter);
 
 // ✅ Global CORS Response Headers Middleware
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", [config.CORS_ORIGIN, 'https://www.fuckleetcode.tech', 'https://fuckleetcode.tech', 'https://www.fuckleetcode.tech/', 'https://fuckleetcode.tech/', '*' ]);
+    res.header("Access-Control-Allow-Origin", [config.CORS_ORIGIN,'www.fuckleetcode.tech/', 'https://www.fuckleetcode.tech', 'https://fuckleetcode.tech', 'https://www.fuckleetcode.tech/', 'https://fuckleetcode.tech/', '*' ]);
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, token, x-secret-key");
     res.header("Access-Control-Allow-Credentials", "true");
