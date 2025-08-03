@@ -16,11 +16,17 @@ const config = {
     // Admin Configuration
     ADMIN_SECRET_KEY: process.env.ADMIN_SECRET_KEY || 'your-admin-secret-key-here',
 
+    // Google Sheets Configuration
+    GOOGLE_SPREADSHEET_ID: process.env.GOOGLE_SPREADSHEET_ID || '',
+    GOOGLE_SHEET_RANGE: process.env.GOOGLE_SHEET_RANGE || 'Emails!A:B',
+    GOOGLE_COUNT_RANGE: process.env.GOOGLE_COUNT_RANGE || 'Emails!C2',
+    GOOGLE_SERVICE_ACCOUNT_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '',
+
     // // API Keys
     // GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
     
     // CORS Configuration
-    CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3001',
+    CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:8080',
     
     // Rate Limiting
     RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes

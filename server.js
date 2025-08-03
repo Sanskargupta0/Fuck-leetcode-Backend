@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
-import xss from 'xss-clean';
 import compression from 'compression';
 import morgan from 'morgan';
 
@@ -17,6 +14,10 @@ import { globalErrorHandler } from './src/utils/errorHandler.js';
 // import userRoutes from './src/api/routes/user.routes.js';
 import taskRoutes from './src/api/routes/task.routes.js';
 import adminRoutes from './src/api/routes/admin.routes.js';
+import waitlistRoutes from './src/api/routes/waitlist.routes.js';
+
+// Import services
+import googleSheetsService from './src/services/googleSheets.service.js';
 
 // Initialize Express app
 const app = express();
@@ -24,13 +25,33 @@ const app = express();
 // Connect to database
 connectDB();
 
-// Trust proxy (important for rate limiting behind proxies like Heroku, Nginx, etc.)
+// Initialize Google Sheets service
+(async () => {
+    try {
+        await googleSheetsService.initializeAuth();
+        logger.info('✅ Google Sheets service initialized successfully');
+    } catch (error) {
+        logger.error('❌ Failed to initialize Google Sheets service:', error.message);
+    }
+})();
+
+
+app.use(cors({
+    origin: config.CORS_ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token'],
+    exposedHeaders: ['Content-Type', 'Authorization', 'token'],
+    credentials: true
+}))
+
+// Trust proxy
 app.set('trust proxy', 1);
 
-// Security middleware
-app.use(helmet()); // Set various HTTP headers
-app.use(mongoSanitize()); // Prevent NoSQL injection attacks
-app.use(xss()); // Clean user input from XSS attacks
+// // Security middleware
+//app.use(helmet()); // Set various HTTP headers
+//app.use(mongoSanitize()); // Prevent NoSQL injection attacks
+//app.use(xss()); // Clean user input from XSS attacks
+
 
 // Rate limiting
 const limiter = rateLimit({
@@ -43,14 +64,19 @@ const limiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false
 });
+
 app.use('/api/', limiter);
 
-// CORS configuration
-app.use(cors({
-    origin: config.CORS_ORIGIN,
-    credentials: true,
-    optionsSuccessStatus: 200
-}));
+
+// ✅ Global CORS Response Headers Middleware
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+  });
+
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -81,6 +107,7 @@ app.get('/health', (req, res) => {
 // app.use(`/api/${config.API_VERSION}/users`, userRoutes);
 app.use(`/api/${config.API_VERSION}/tasks`, taskRoutes);
 app.use(`/api/${config.API_VERSION}/admin`, adminRoutes);
+app.use(`/api/${config.API_VERSION}/waitlist`, waitlistRoutes);
 
 // Handle undefined routes
 app.all('/*splat', (req, res) => {
