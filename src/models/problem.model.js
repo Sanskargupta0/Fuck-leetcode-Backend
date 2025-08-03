@@ -36,6 +36,6 @@ const problemSchema = new mongoose.Schema({
 });
 
 // Compound  indexes for faster queries
-problemSchema.index({ question_id: 1,   question__title_slug: 1})
+problemSchema.index({ question_id: 1, question__title_slug: 1 });
 
 export default mongoose.model('Problem', problemSchema);

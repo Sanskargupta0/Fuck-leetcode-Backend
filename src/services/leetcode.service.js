@@ -10,7 +10,7 @@ class LeetcodeService {
     this.LEETCODE_API_URL = 'https://leetcode.com/api/problems/all/';
   }
 
-  async syncProblemsWithDB() {
+  async syncProblems() {
     try {
       // Fetch data from LeetCode API
       console.log('Fetching data from LeetCode API...');
@@ -60,6 +60,11 @@ class LeetcodeService {
       logger.error('Error populating database:', error);
       throw error;
     }
+  }
+
+  // Alias for backward compatibility
+  async syncProblemsWithDB() {
+    return this.syncProblems();
   }
 
 }

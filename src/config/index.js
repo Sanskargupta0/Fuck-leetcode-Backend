@@ -52,7 +52,10 @@ const config = {
 const requiredEnvVars = ['MONGODB_URI'];
 
 if (config.NODE_ENV === 'production') {
-    requiredEnvVars.push('GEMINI_API_KEY');
+    // Only require GOOGLE_SERVICE_ACCOUNT_KEY in production if Google Sheets features are needed
+    if (config.GOOGLE_SPREADSHEET_ID) {
+        requiredEnvVars.push('GOOGLE_SERVICE_ACCOUNT_KEY');
+    }
 }
 
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
@@ -60,7 +63,8 @@ const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 if (missingEnvVars.length > 0) {
     console.error('Missing required environment variables:', missingEnvVars.join(', '));
     if (config.NODE_ENV === 'production') {
-        process.exit(1);
+        console.warn('Some features may not work properly without all environment variables');
+        // Don't exit in production, let the app start but warn about missing features
     }
 }
 

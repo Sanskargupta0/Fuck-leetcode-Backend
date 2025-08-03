@@ -18,23 +18,30 @@ class GoogleSheetsService {
                 return;
             }
 
-            if (config.GOOGLE_SERVICE_ACCOUNT_KEY) {
-                // Using Service Account (Recommended for production)
-                const serviceAccount = JSON.parse(config.GOOGLE_SERVICE_ACCOUNT_KEY);
-                this.auth = new google.auth.GoogleAuth({
-                    credentials: serviceAccount,
-                    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-                });
-                logger.info('Google Sheets: Service Account authentication initialized');
-            } else {
-                throw new Error('Missing Google authentication credentials. Please check your environment variables.');
+            if (!config.GOOGLE_SERVICE_ACCOUNT_KEY) {
+                logger.warn('Google Sheets service not configured - GOOGLE_SERVICE_ACCOUNT_KEY missing');
+                return;
             }
+
+            if (!config.GOOGLE_SPREADSHEET_ID) {
+                logger.warn('Google Sheets service not configured - GOOGLE_SPREADSHEET_ID missing');
+                return;
+            }
+
+            // Using Service Account (Recommended for production)
+            const serviceAccount = JSON.parse(config.GOOGLE_SERVICE_ACCOUNT_KEY);
+            this.auth = new google.auth.GoogleAuth({
+                credentials: serviceAccount,
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+            });
+            logger.info('Google Sheets: Service Account authentication initialized');
             
             this.isInitialized = true;
             logger.info('Google Sheets API authentication initialized successfully');
         } catch (error) {
             logger.error('Failed to initialize Google authentication:', error);
-            throw error;
+            // Don't throw error to prevent app crash if Google Sheets is not critical
+            logger.warn('Google Sheets service will be disabled due to configuration error');
         }
     }
 

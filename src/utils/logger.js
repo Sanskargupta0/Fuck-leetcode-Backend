@@ -12,11 +12,16 @@ const colors = {
 
 winston.addColors(colors);
 
-// Create logs directory if it doesn't exist
+// Create logs directory if it doesn't exist (only if not in serverless environment)
 import fs from 'fs';
-const logsDir = path.join(process.cwd(), 'logs');
-if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir);
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NETLIFY;
+
+let logsDir;
+if (!isServerless) {
+    logsDir = path.join(process.cwd(), 'logs');
+    if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir);
+    }
 }
 
 // Define log format
@@ -40,29 +45,29 @@ const logger = winston.createLogger({
     level: config.LOG_LEVEL,
     format: logFormat,
     defaultMeta: { service: 'fuck-leetcode-backend' },
-    transports: [
-        // Write all logs with level 'error' and below to error.log
-        new winston.transports.File({
-            filename: path.join(logsDir, 'error.log'),
-            level: 'error',
-            maxsize: 5242880, // 5MB
-            maxFiles: 5,
-        }),
-        // Write all logs with level 'info' and below to combined.log
-        new winston.transports.File({
-            filename: path.join(logsDir, 'combined.log'),
-            maxsize: 5242880, // 5MB
-            maxFiles: 5,
-        }),
-    ],
+    transports: [],
 });
 
-// If we're not in production, log to the console as well
-if (config.NODE_ENV !== 'production') {
-    logger.add(new winston.transports.Console({
-        format: consoleFormat
+// Add file transports only if not in serverless environment
+if (!isServerless && logsDir) {
+    logger.add(new winston.transports.File({
+        filename: path.join(logsDir, 'error.log'),
+        level: 'error',
+        maxsize: 5242880, // 5MB
+        maxFiles: 5,
+    }));
+    
+    logger.add(new winston.transports.File({
+        filename: path.join(logsDir, 'combined.log'),
+        maxsize: 5242880, // 5MB
+        maxFiles: 5,
     }));
 }
+
+// Always add console transport
+logger.add(new winston.transports.Console({
+    format: config.NODE_ENV !== 'production' ? consoleFormat : logFormat
+}));
 
 // Create a stream object for Morgan middleware
 logger.stream = {

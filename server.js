@@ -37,9 +37,9 @@ connectDB();
 
 
 app.use(cors({
-    origin: config.CORS_ORIGIN,
+    origin: config.CORS_ORIGIN || '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-secret-key'],
     exposedHeaders: ['Content-Type', 'Authorization', 'token'],
     credentials: true
 }))
@@ -70,12 +70,18 @@ app.use('/api/', limiter);
 
 // ✅ Global CORS Response Headers Middleware
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", config.CORS_ORIGIN || "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, token, x-secret-key");
     res.header("Access-Control-Allow-Credentials", "true");
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
     next();
-  });
+});
 
 
 // Body parsing middleware

@@ -29,11 +29,11 @@ const userSchema = new mongoose.Schema({
     }],
     apiKey: {
         type: String,
-        unique: true,
-        createdAt: {
-            type: Date,
-            default: Date.now
-        }
+        unique: true
+    },
+    apiKeyCreatedAt: {
+        type: Date,
+        default: Date.now
     }
 }, {
     timestamps: true
