@@ -39,8 +39,8 @@ connectDB();
 app.use(cors({
     origin: function (origin, callback) {
         const allowedOrigins = [
-            'https://www.fuckleetcode.tech',
-            'https://fuckleetcode.tech',
+            'https://www.fuckleetcodee.vercel.app',
+            'https://fuckleetcodee.vercel.app',
             'http://localhost:3000',
             'http://localhost:3001',
             config.CORS_ORIGIN
